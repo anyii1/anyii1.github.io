@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Vuex使用总结</title>
+    <link href="/2022/07/21/2022-07-20-Vuex-shi-yong-zong-jie/"/>
+    <url>/2022/07/21/2022-07-20-Vuex-shi-yong-zong-jie/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Vuex是什么"><a href="#Vuex是什么" class="headerlink" title="Vuex是什么"></a>Vuex是什么</h2><p>在Vue.js应用程序中实现集中式状态管理的插件,对vue应用中的多个组件的共享状态进行集中式的管理(读&#x2F;写),也是一种组件间通信的方式,且适用于任意组件间通信.</p><h2 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h2><p>1.安装<code>Vuex</code>;</p><p>2.导入<code>Vuex</code>,使用插件<code>Vue.use(Vuex)</code>;</p><p>3.创建<code>store</code>;</p><p>4.挂载<code>store</code>;</p><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install vuex@next --save<br></code></pre></td></tr></table></figure><h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// ./src/store/index.js</span><br><span class="hljs-keyword">import</span> <span class="hljs-title class_">Vue</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;VUE&#x27;</span><br><span class="hljs-keyword">import</span> <span class="hljs-title class_">Vuex</span> feom <span class="hljs-string">&#x27;vuex&#x27;</span><br><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">Vuex</span>)<br></code></pre></td></tr></table></figure><h3 id="创建store"><a href="#创建store" class="headerlink" title="创建store"></a>创建store</h3><p>通过<code>new Vuex.store()</code>创建store实例</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// ./src/store/index.js</span><br><span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vuex</span>.<span class="hljs-title function_">store</span>(&#123;<br>    <span class="hljs-attr">state</span>:&#123;&#125;,<br>    <span class="hljs-attr">mutations</span>:&#123;&#125;,<br>    actions;&#123;&#125;,<br>    <span class="hljs-attr">getters</span>:&#123;&#125;,<br>    <span class="hljs-attr">modules</span>:&#123;&#125;<br>&#125;)<br><br><span class="hljs-comment">//导出store</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store  <br></code></pre></td></tr></table></figure><p>挂载Vue实例</p><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-comment">// ./src/main.js</span><br><span class="hljs-keyword">import</span> Vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span><br><span class="hljs-keyword">import</span> store <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span><br><br><span class="hljs-keyword">new</span> Vue(&#123;<br>el:<span class="hljs-string">&#x27;#app&#x27;</span>,<br>store<br>&#125;)<br></code></pre></td></tr></table></figure><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="state"><a href="#state" class="headerlink" title="state"></a>state</h3><h4 id="在组件获取Vuex状态"><a href="#在组件获取Vuex状态" class="headerlink" title="在组件获取Vuex状态"></a>在组件获取Vuex状态</h4><p>组件内部直接通过this.$store.state.xxx获取相应状态</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div&gt;<br>    &lt;h1&gt;&#123;&#123; $store.state.title &#125;&#125;&lt;/h1&gt;<br>    &lt;p&gt;&#123;&#123; content &#125;&#125;&lt;/p&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>  data() &#123;<br>    return &#123;<br>      content: tis.$store.state.content<br>    &#125;;<br>  &#125;,<br>&#125;;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure><h4 id="mapState辅助函数"><a href="#mapState辅助函数" class="headerlink" title="mapState辅助函数"></a>mapState辅助函数</h4><p>当一个组件需要获取多个状态的时候,我们可以使用<code>mapState</code>辅助函数帮助我们生成计算属性.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs vue">import &#123; mapState &#125; from &quot;vuex&quot;;<br><br>export default &#123;<br>  computed: mapState(&#123;<br>    //箭头函数简写<br>    count: (state) =&gt; state.count,<br><br>    //传入字符串参数 &#x27;count&#x27; 等同于 `state =&gt; state.count`<br>    countAlias: &quot;count&quot;,<br><br>    //为了使用 `this` 获取局部状态,必须使用常规函数<br>    countPlusLocalState(state) &#123;<br>      return state.count + this.localCount;<br>    &#125;,<br>  &#125;),<br>&#125;;<br></code></pre></td></tr></table></figure><p>当映射的计算属性的名称与state中的子节点名称相同时,我们也可以给<code>mapState</code>传一个字符串数组.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs vue">computed:mapState([<br>//映射 this.count 为 store.state.count<br>&#x27;count&#x27;<br>])<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Vue2</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Vue</tag>
+      
+      <tag>前端</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>电子书分享</title>
     <link href="/2022/06/28/2022-06-28-dian-zi-shu/"/>
     <url>/2022/06/28/2022-06-28-dian-zi-shu/</url>
@@ -25,19 +52,6 @@
       <tag>分享</tag>
       
     </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="/2022/06/09/hello-world/"/>
-    <url>/2022/06/09/hello-world/</url>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
     
   </entry>
   
